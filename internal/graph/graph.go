@@ -15,6 +15,10 @@ type Node struct {
 	list  bool
 }
 
+func (n *Node) List(list bool) {
+	n.list = list
+}
+
 func (n *Node) UnmarshalJSON(data []byte) error {
 	return unmarshalNode(n, data)
 }
@@ -123,4 +127,8 @@ func MarshalJSON(n *Node) ([]byte, error) {
 	}
 
 	return out.Bytes(), nil
+}
+
+func LoadExternalResource(n *Node) error {
+	return nil
 }

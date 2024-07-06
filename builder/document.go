@@ -28,8 +28,32 @@ func (b *DocumentBuilder) GetNamespace() string {
 	return node.GetString()
 }
 
+func (b *DocumentBuilder) SetName(dsl string) *DocumentBuilder {
+	node := b.root.Edge("name")
+	node.SetString(dsl)
+	return b
+}
+
+func (b *DocumentBuilder) GetName() string {
+	node := b.root.Edge("name")
+	return node.GetString()
+}
+
+func (b *DocumentBuilder) SetVersion(dsl string) *DocumentBuilder {
+	node := b.root.Edge("version")
+	node.SetString(dsl)
+	return b
+}
+
+func (b *DocumentBuilder) GetVersion() string {
+	node := b.root.Edge("version")
+	return node.GetString()
+}
+
 func NewDocumentBuilder(root *graph.Node) *DocumentBuilder {
-	return &DocumentBuilder{
+	documentBuilder := &DocumentBuilder{
 		root: root,
 	}
+	documentBuilder.SetDSL("1.0.0-alpha1")
+	return documentBuilder
 }

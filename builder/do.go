@@ -11,7 +11,7 @@ type DoBuilder struct {
 	tasks []any
 }
 
-func (b *DoBuilder) AddTaskCall(name string) (*CallBuilder, int) {
+func (b *DoBuilder) AddCall(name string) (*CallBuilder, int) {
 	index := len(b.tasks)
 	nodeIndex := b.root.Edge(fmt.Sprintf("%d", index))
 	nodeName := nodeIndex.Edge(name)
@@ -21,7 +21,7 @@ func (b *DoBuilder) AddTaskCall(name string) (*CallBuilder, int) {
 	return callBuilder, index
 }
 
-func (b *DoBuilder) AddWaitCall(name string) (*WaitBuilder, int) {
+func (b *DoBuilder) AddWait(name string) (*WaitBuilder, int) {
 	index := len(b.tasks)
 	nodeIndex := b.root.Edge(fmt.Sprintf("%d", index))
 	nodeName := nodeIndex.Edge(name)
@@ -37,6 +37,7 @@ func (b *DoBuilder) RemoveTask(index int) *DoBuilder {
 }
 
 func NewDoBuilder(root *graph.Node) *DoBuilder {
+	root.List(true)
 	return &DoBuilder{
 		root:  root,
 		tasks: []any{},

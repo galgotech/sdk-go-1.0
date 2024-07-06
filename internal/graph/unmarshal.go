@@ -56,7 +56,7 @@ func unmarshalList(n *Node, data []byte) error {
 		return err
 	}
 
-	n.list = true
+	n.List(true)
 
 	for i, val := range dataMap {
 		key := fmt.Sprintf("%d", i)

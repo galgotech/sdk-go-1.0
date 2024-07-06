@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package parser
+package validate
 
 import (
 	"fmt"
@@ -33,23 +33,14 @@ const (
 
 var supportedExt = []string{extYAML, extYML, extJSON}
 
-// FromYAMLSource parses the given Serverless Workflow YAML source into the Workflow type.
-func FromYAMLSource(source []byte) (bool, error) {
-	jsonBytes, err := yaml.YAMLToJSON(source)
-	if err != nil {
-		return false, err
-	}
-	return FromJSONSource(jsonBytes)
-}
-
 // FromFile parses the given Serverless Workflow file into the Workflow type.
-func FromFile(path string) (bool, error) {
+func FromFile(path string) error {
 	if err := checkFilePath(path); err != nil {
-		return false, err
+		return err
 	}
 	fileBytes, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
-		return false, err
+		return err
 	}
 	if strings.HasSuffix(path, extYAML) || strings.HasSuffix(path, extYML) {
 		return FromYAMLSource(fileBytes)
@@ -57,8 +48,17 @@ func FromFile(path string) (bool, error) {
 	return FromJSONSource(fileBytes)
 }
 
+// FromYAMLSource parses the given Serverless Workflow YAML source into the Workflow type.
+func FromYAMLSource(source []byte) error {
+	jsonBytes, err := yaml.YAMLToJSON(source)
+	if err != nil {
+		return err
+	}
+	return FromJSONSource(jsonBytes)
+}
+
 // FromJSONSource parses the given Serverless Workflow JSON source into the Workflow type.
-func FromJSONSource(source []byte) (bool, error) {
+func FromJSONSource(source []byte) error {
 	return validator.Valid(source)
 }
 

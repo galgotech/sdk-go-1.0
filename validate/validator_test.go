@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package parser
+package validate
 
 import (
 	"testing"
@@ -28,13 +28,13 @@ document:
   name: call-http-shorthand-endpoint
   version: 1.0.0-alpha1
 do:
-  call: http
-  with:
-    method: get
-    endpoint: https://petstore.swagger.io/v2/pet/{petId}
+  - test:
+      call: http
+      with:
+        method: get
+        endpoint: https://petstore.swagger.io/v2/pet/{petId}
 `)
-	success, err := FromYAMLSource(source)
-	assert.True(t, success)
+	err := FromYAMLSource(source)
 	assert.NoError(t, err)
 
 }

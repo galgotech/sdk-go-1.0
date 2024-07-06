@@ -1,6 +1,8 @@
 package builder
 
-import "github.com/serverlessworkflow/sdk-go/v3/internal/graph"
+import (
+	"github.com/serverlessworkflow/sdk-go/v3/internal/graph"
+)
 
 type WorkflowBuilder struct {
 	root     *graph.Node
@@ -16,16 +18,27 @@ func (b *WorkflowBuilder) Document() *DocumentBuilder {
 	return b.document
 }
 
-func (b *WorkflowBuilder) Do(dsl string) *DoBuilder {
+func (b *WorkflowBuilder) Do() *DoBuilder {
 	if b.do == nil {
 		b.do = NewDoBuilder(b.root.Edge("do"))
 	}
 	return b.do
 }
 
-func (b *WorkflowBuilder) Use(dsl string) *UseBuilder {
+func (b *WorkflowBuilder) Use() *UseBuilder {
 	if b.use == nil {
 		b.use = NewUseBuilder(b.root.Edge("use"))
 	}
 	return b.use
+}
+
+func (b *WorkflowBuilder) Node() *graph.Node {
+	return b.root
+}
+
+func NewWorkflowBuilder() *WorkflowBuilder {
+	root := graph.NewNode()
+	return &WorkflowBuilder{
+		root: root,
+	}
 }
