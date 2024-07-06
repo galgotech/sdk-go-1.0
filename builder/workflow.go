@@ -32,7 +32,7 @@ func (b *WorkflowBuilder) Use() *UseBuilder {
 	return b.use
 }
 
-func (b *WorkflowBuilder) Node() *graph.Node {
+func (b *WorkflowBuilder) node() *graph.Node {
 	return b.root
 }
 

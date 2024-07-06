@@ -3,7 +3,6 @@ package graph
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"log"
 	"strings"
 )
@@ -84,20 +83,39 @@ func (n *Node) Clear() *Node {
 	return n
 }
 
-func (n *Node) Lookup(path string) (*Node, error) {
-	pathSplit := strings.Split(path, ".")
-	edge := n
-
-	walked := []string{}
-	for _, key := range pathSplit {
-		walked = append(walked, key)
-		if val, ok := edge.edges[key]; ok {
-			edge = val
-		} else {
-			return nil, fmt.Errorf("path not found: %s", strings.Join(walked, "."))
-		}
+func (n *Node) Lookup(path string) *Node {
+	dotIndex := strings.Index(path, ".")
+	var key string
+	if dotIndex == -1 {
+		key = strings.TrimSpace(path)
+	} else {
+		key = strings.TrimSpace(path[0:dotIndex])
+		path = path[dotIndex+1:]
 	}
-	return edge, nil
+
+	var currentNode *Node
+	if n.list && key == "*" {
+		if dotIndex == -1 {
+			return n
+		}
+		for _, node := range n.edges {
+			currentNode = node.Lookup(path)
+			if currentNode != nil {
+				return currentNode
+			}
+		}
+		return nil
+	}
+
+	currentNode = n.Edge(key)
+	if currentNode == nil {
+		return nil
+	}
+	if dotIndex == -1 {
+		return currentNode
+	}
+
+	return currentNode.Lookup(path)
 }
 
 func NewNode() *Node {
