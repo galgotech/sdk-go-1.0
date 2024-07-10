@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/serverlessworkflow/sdk-go/v3/builder"
 	"github.com/serverlessworkflow/sdk-go/v3/validate"
@@ -9,6 +10,7 @@ import (
 
 func main() {
 	build()
+	buildFromSource()
 	validExample()
 }
 
@@ -43,11 +45,31 @@ func build() {
 	fmt.Println(string(data))
 }
 
+func buildFromSource() {
+	fmt.Println("build from source")
+
+	workflowBuilder, err := builder.NewWorkflowBuilderFromFile("./example/example1.yaml")
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println("document.name:", workflowBuilder.Document().GetName())
+	}
+
+	err = builder.Validate(workflowBuilder)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println("success")
+	}
+}
+
 func validExample() {
+	fmt.Println("valid")
+
 	fmt.Println("./example/example1.yaml")
 	err := validate.FromFile("./example/example1.yaml")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	} else {
 		fmt.Println("success")
 	}
@@ -56,7 +78,7 @@ func validExample() {
 	fmt.Println("./example/example2.yaml")
 	err = validate.FromFile("./example/example2.yaml")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	} else {
 		fmt.Println("success")
 	}

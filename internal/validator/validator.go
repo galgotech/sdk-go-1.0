@@ -13,17 +13,7 @@ import (
 
 var schema *jsonschema.Schema
 
-func Valid(source []byte) error {
-	root, err := graph.UnmarshalJSON(source)
-	if err != nil {
-		return err
-	}
-
-	err = graph.LoadExternalResource(root)
-	if err != nil {
-		return err
-	}
-
+func Valid(root *graph.Node, source []byte) error {
 	inst, err := jsonschema.UnmarshalJSON(bytes.NewReader(source))
 	if err != nil {
 		return err

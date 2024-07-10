@@ -2,6 +2,7 @@ package builder
 
 import (
 	"github.com/serverlessworkflow/sdk-go/v3/internal/graph"
+	"github.com/serverlessworkflow/sdk-go/v3/internal/load"
 )
 
 type WorkflowBuilder struct {
@@ -41,4 +42,37 @@ func NewWorkflowBuilder() *WorkflowBuilder {
 	return &WorkflowBuilder{
 		root: root,
 	}
+}
+
+func NewWorkflowBuilderFromFile(path string) (*WorkflowBuilder, error) {
+	root, _, err := load.FromFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return &WorkflowBuilder{
+		root: root,
+	}, nil
+}
+
+func NewWorkflowBuilderFromYAMLSource(source []byte) (*WorkflowBuilder, error) {
+	root, _, err := load.FromYAMLSource(source)
+	if err != nil {
+		return nil, err
+	}
+
+	return &WorkflowBuilder{
+		root: root,
+	}, nil
+}
+
+func NewWorkflowBuilderFromJSONSource(source []byte) (*WorkflowBuilder, error) {
+	root, _, err := load.FromJSONSource(source)
+	if err != nil {
+		return nil, err
+	}
+
+	return &WorkflowBuilder{
+		root: root,
+	}, nil
 }
